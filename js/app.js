@@ -89,13 +89,26 @@ var ViewModel = function() {
 				item.infowindow.close();
 			});
 
+			infowindow.open(map, item.marker);
+
 			var infoName = '<h4>'+ item.name + '</h4>'
-			var viewTag = '<div id="street-view"></div>';
-			var content = infoName + viewTag;
+			var viewTag = '<div id="pano"></div>';
+			var text = '<p>fsjkfhaflksajdlkfnadsasflkhflasfdas</p>'
+			var content = infoName + viewTag + text;
 			infowindow.setContent(content);
 
+	        console.log(item.location)
+			
 
-			infowindow.open(map, item.marker);
+			// panorama
+			var panorama;
+			function activepanorama() {
+				panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'));
+      			panorama.setPosition(item.location);
+      		}
+			activepanorama();
+        	console.log(document.getElementById("pano"))
+			console.log(infowindow.content)
 		}
 	});
 
