@@ -22,7 +22,7 @@
 			<p> Searching result : <strong data-bind="text: filter"></strong></p>
 
 			<ul data-bind="foreach: filteredItems">
-        		<li>
+        		<li data-bind="click: displayInfoWindow">
             		<span data-bind="text: $data.name"></span>
         		</li>
     		</ul>

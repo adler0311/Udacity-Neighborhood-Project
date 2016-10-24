@@ -8,3 +8,7 @@ html, body {
   height: 100%;
   margin: 10px 10px 10px 10px;
 }
+
+#street-view {
+	hieght: 100%;
+}

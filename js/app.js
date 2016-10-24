@@ -15,11 +15,11 @@ function initMap() {
 // model of neighborhood location.
 var Spots = [
 	{
-		name: "starbugs yonsei",
+		name: "starbucks yonsei",
 		location: {lat: 37.5586875, lng: 126.93669879999993}
 	},
 	{
-		name: "starmacdonald yonsei",
+		name: "macdonald yonsei",
 		location: {lat: 37.5585515, lng: 126.93670859999997}
 	},
 	{
@@ -49,6 +49,7 @@ var ViewModel = function() {
 		self.locations.push(new Spot(spot)); // 모델로부터 spot데이터를 가져와서 Spot이라는 object에서 observable로 바꾼 후 spotList에 집어 넣는다.
 	});
 
+	// make marker, click event...
 	self.locations().forEach(function(item) {
 		console.log(item)
 		var marker = new google.maps.Marker({
@@ -58,32 +59,47 @@ var ViewModel = function() {
 		    title: item.name
 		});	
 
-		item.infowindow = new google.maps.InfoWindow({
-			content: item.name
-		});
+		// infowindow 선언
+		item.infowindow = new google.maps.InfoWindow();
 		item.marker = marker
 
+		// events when click the marker
 		marker.addListener('click', function(){
-			
-			// Before animate this marker, all the other animation stop.
-			self.locations().forEach(function(item) {
-				
-				item.marker.setAnimation(null);
-				item.infowindow.close();
-			});
-
-			// Set this marker animated
+			// Set this marker animate BOUNCE
 			if (marker.getAnimation() !== null) {
 				marker.setAnimation(null);
 			} else {
 				marker.setAnimation(google.maps.Animation.BOUNCE);
 			}
 
-			item.infowindow.open(map, marker);
-
+			// execute displayInfoWindow function when click the marker
+			showInfo(item, item.infowindow);
 		});
 
+		item.displayInfoWindow = function() {
+			showInfo(item, this.infowindow);
+		}
+
+
+		// infowindow에 내용을 보여주는 displayInfoWindow function
+		showInfo = function(item, infowindow) {
+			// Before animate this marker, all the other animation stop.
+			self.locations().forEach(function(item) {				
+				item.marker.setAnimation(null);
+				item.infowindow.close();
+			});
+
+			var infoName = '<h4>'+ item.name + '</h4>'
+			var viewTag = '<div id="street-view"></div>';
+			var content = infoName + viewTag;
+			infowindow.setContent(content);
+
+
+			infowindow.open(map, item.marker);
+		}
 	});
+
+
 
 	self.filter = ko.observable(""); // searching form의 value.
 
