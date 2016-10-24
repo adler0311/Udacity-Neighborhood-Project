@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<title>Neighborhood map</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="css/base.css" >
+
+</head>
+<body>
+	<div class="search">
+	    <label>Search</label>
+	    <input data-bind='value: filter, valueUpdate: "afterkeydown"' class="form-control">
+	</div>
+	<div class="col-md-4">
+		<div class="list">
+			<p> Searching result : <strong data-bind="text: filter"></strong></p>
+
+			<ul data-bind="foreach: filteredItems">
+        		<li>
+            		<span data-bind="text: $data.name"></span>
+        		</li>
+    		</ul>
+		</div>
+	</div>
+	<div id="map">
+	</div>
+
+	<script src="js/jquery.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOZhYkXdYEeB51O3L_TYW0JIWVrqvYaSI&callback=initMap"
+        async defer></script>
+  	<script src="js/lib/knockout-3.2.0.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
