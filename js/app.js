@@ -21,8 +21,8 @@ var Spots = [
 		location: {lat: 37.5586875, lng: 126.93669879999993}
 	},
 	{
-		name: "macdonald yonsei",
-		location: {lat: 37.5585515, lng: 126.93670859999997}
+		name: "Chelsea Loft",
+		location: {lat: 40.7444883, lng: -73.9949465}
 	},
 	{
 		name: "burgerking yonsei",
@@ -83,15 +83,46 @@ var ViewModel = function() {
 	function populateInfoWindow(marker, infowindow) {
 		// Check to make sure the infowindow is not already opened on the marker
 		if (infowindow.marker != marker) {
+			infowindow.setContent('');
 			infowindow.marker = marker;
-			infowindow.setContent('<div>' + marker.title + '</div>');
-			infowindow.open(map, marker);
+			// infowindow.open(map, marker);
+
 			//Make sure the marker property is cleared if the infowindow is closed.
 			infowindow.addListener('closeclick', function() {
-				infowindow.marker(null);
+				infowindow.marker =null ;
 			});
-		}
-	};
+			var streetViewService = new google.maps.StreetViewService();
+			var radius = 50;
+
+			function getStreetView(data, status) {
+				if (status == google.maps.StreetViewStatus.OK) {
+					var nearStreetViewLocation = data.location.latLng;
+					
+					console.log(nearStreetViewLocation);
+					var heading = google.maps.geometry.spherical.computeHeading(
+						nearStreetViewLocation, marker.position);
+					infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+					var panoramaOptions = {
+						position: nearStreetViewLocation,
+						pov: {
+							heading: heading,
+							pitch: 30
+						}
+					};
+					var panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), panoramaOptions);
+					console.log(panorama);
+				} else {
+					infowindow.setContent('<div>' + marker.title +'</div>'+'<div>No Street View Found</div>');
+ 				}
+			}
+
+			// Use streetview service to get the closest streetview image within
+			// 50 meters of the markers position.
+			streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+			// Open the infowindow on the correct marker.
+			infowindow.open(map, marker);
+		} // end of the if statement
+	}; // end of the populateInfoWindow function.
 
 	self.filter = ko.observable(""); // searching form의 value.
 
