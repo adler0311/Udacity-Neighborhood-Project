@@ -6,6 +6,8 @@ function initMap() {
 		zoom: 17
   	});
 
+  	
+
   	// Activates knockout.js
   	// applyBindings를 여기에 해야 google을 사용할 수 있다.
 	ko.applyBindings(new ViewModel()); 
@@ -49,70 +51,47 @@ var ViewModel = function() {
 		self.locations.push(new Spot(spot)); // 모델로부터 spot데이터를 가져와서 Spot이라는 object에서 observable로 바꾼 후 spotList에 집어 넣는다.
 	});
 
+	var infowindow = new google.maps.InfoWindow();
+	var bounds = new google.maps.LatLngBounds();
+
 	// make marker, click event...
 	self.locations().forEach(function(item) {
-		console.log(item)
+
 		var marker = new google.maps.Marker({
-			position: item.location, 
-			animation: google.maps.Animation.DROP,
 		    map: map,
-		    title: item.name
+			position: item.location, 
+		    title: item.name,
+			animation: google.maps.Animation.DROP
 		});	
 
-		// infowindow 선언
-		item.infowindow = new google.maps.InfoWindow();
-		item.marker = marker
+		item.marker = marker;
+		bounds.extend(marker.position);
 
 		// events when click the marker
 		marker.addListener('click', function(){
-			// Set this marker animate BOUNCE
-			if (marker.getAnimation() !== null) {
-				marker.setAnimation(null);
-			} else {
-				marker.setAnimation(google.maps.Animation.BOUNCE);
-			}
-
 			// execute displayInfoWindow function when click the marker
-			showInfo(item, item.infowindow);
+			populateInfoWindow(this, infowindow);
 		});
 
 		item.displayInfoWindow = function() {
-			showInfo(item, this.infowindow);
-		}
-
-
-		// infowindow에 내용을 보여주는 displayInfoWindow function
-		showInfo = function(item, infowindow) {
-			// Before animate this marker, all the other animation stop.
-			self.locations().forEach(function(item) {				
-				item.marker.setAnimation(null);
-				item.infowindow.close();
-			});
-
-			infowindow.open(map, item.marker);
-
-			var infoName = '<h4>'+ item.name + '</h4>'
-			var viewTag = '<div id="pano"></div>';
-			var text = '<p>fsjkfhaflksajdlkfnadsasflkhflasfdas</p>'
-			var content = infoName + viewTag + text;
-			infowindow.setContent(content);
-
-	        console.log(item.location)
-			
-
-			// panorama
-			var panorama;
-			function activepanorama() {
-				panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'));
-      			panorama.setPosition(item.location);
-      		}
-			activepanorama();
-        	console.log(document.getElementById("pano"))
-			console.log(infowindow.content)
+			populateInfoWindow(this.marker, infowindow);;			
 		}
 	});
 
+	map.fitBounds(bounds);
 
+	function populateInfoWindow(marker, infowindow) {
+		// Check to make sure the infowindow is not already opened on the marker
+		if (infowindow.marker != marker) {
+			infowindow.marker = marker;
+			infowindow.setContent('<div>' + marker.title + '</div>');
+			infowindow.open(map, marker);
+			//Make sure the marker property is cleared if the infowindow is closed.
+			infowindow.addListener('closeclick', function() {
+				infowindow.marker(null);
+			});
+		}
+	};
 
 	self.filter = ko.observable(""); // searching form의 value.
 
