@@ -6,7 +6,6 @@ function initMap() {
 		zoom: 17
   	});
 
-  	
 
   	// Activates knockout.js
   	// applyBindings를 여기에 해야 google을 사용할 수 있다.
@@ -17,21 +16,42 @@ function initMap() {
 // model of neighborhood location.
 var Spots = [
 	{
-		name: "starbucks yonsei",
-		location: {lat: 37.5586875, lng: 126.93669879999993}
+		name: "Chloris Tea Garden",
+		location: {lat: 37.55774448891895, lng: 126.93872809410095},
+		foursquareId: "4bcac5b6fb84c9b62fca1d3e"
 	},
 	{
-		name: "Chelsea Loft",
-		location: {lat: 40.7444883, lng: -73.9949465}
+		name: "bar TILT",
+		location: {lat: 37.55891542039909, lng: 126.93534692663208},
+		foursquareId: "4df2462452b100c2d7f5e412"
 	},
 	{
-		name: "burgerking yonsei",
-		location: {lat: 37.5578925, lng: 126.93667159999995}
+		name: "Minerva",
+		location: {lat: 37.55786084240519, lng: 126.93774042764508},
+		foursquareId: "4baca972f964a520b1013be3"
 	},
 	{
-		name: "pizzahut yonsei",
-		location: {lat: 37.55745599999999, lng: 126.93672530000003}
+		name: "Nice Pig",
+		location: {lat: 37.55853536087748, lng: 126.93880593034153},
+		foursquareId: "50113732e4b0c3490cf8c245"
 	},
+	{
+		name: "The Pie Hole",
+		location: {lat: 37.55914992666027, lng: 126.9344703398036},
+		foursquareId: "4f86ae01e4b0fa91a17db513"
+	},
+	{
+		name: "Gosami",
+		location: {lat: 37.558267958610564, lng: 126.93474329012058},
+		foursquareId: "4ee57d189adf398200800b03"
+	},
+	{
+		name: "Pomme Frites",
+		location: {lat: 37.558942152661935, lng: 126.93552014314709},
+		foursquareId: "513af3dde4b06910fe19e72b"
+	},
+	
+
 ];
 
 
@@ -53,23 +73,48 @@ var ViewModel = function() {
 
 	var infowindow = new google.maps.InfoWindow();
 	var bounds = new google.maps.LatLngBounds();
+	var rating;
 
 	// make marker, click event...
 	self.locations().forEach(function(item) {
 
+		//Foursquare api ajax request
+		$.ajax({
+			type: "GET",
+			dataType: 'JSON',
+			cache: false,
+			url: 'https://api.foursquare.com/v2/venues/explore',
+			data: 'v=20161027&ll=' + item.location.lat + '%2C' + item.location.lng + '&radius=1800&query='
+					+ item.name + '&novelty=new&oauth_token=UY5051X5NZARVOAGHY1Y4UWSVA2VAXUQCWBCNY4WXFTUQSSJ',
+			async: true,
+			success: function(data) {
+				item.rating = data.response.groups[0].items[0].venue.rating;
+				if (item.rating === undefined) {
+					item.rating = 'There is no rating';
+				}
+				console.log(item.rating);
+			},
+			error: function(data) {
+				alert("Failed!")
+			}
+		});
+
+
+
 		var marker = new google.maps.Marker({
 		    map: map,
-			position: item.location, 
+			position: item.location,
 		    title: item.name,
 			animation: google.maps.Animation.DROP
 		});	
-
+		
 		item.marker = marker;
 		bounds.extend(marker.position);
 
 		// events when click the marker
 		marker.addListener('click', function(){
 			// execute displayInfoWindow function when click the marker
+			marker.rating = item.rating
 			populateInfoWindow(this, infowindow);
 		});
 
@@ -86,7 +131,7 @@ var ViewModel = function() {
 			infowindow.setContent('');
 			infowindow.marker = marker;
 			// infowindow.open(map, marker);
-
+			
 			//Make sure the marker property is cleared if the infowindow is closed.
 			infowindow.addListener('closeclick', function() {
 				infowindow.marker =null ;
@@ -97,11 +142,11 @@ var ViewModel = function() {
 			function getStreetView(data, status) {
 				if (status == google.maps.StreetViewStatus.OK) {
 					var nearStreetViewLocation = data.location.latLng;
-					
 					console.log(nearStreetViewLocation);
 					var heading = google.maps.geometry.spherical.computeHeading(
 						nearStreetViewLocation, marker.position);
-					infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+					console.log(marker.rating)
+					infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>'+ '<p>Foursquare rating: ' + marker.rating + '</p>');
 					var panoramaOptions = {
 						position: nearStreetViewLocation,
 						pov: {
