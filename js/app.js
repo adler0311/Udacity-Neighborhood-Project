@@ -113,15 +113,14 @@ var ViewModel = function() {
 			}
 		});
 
-
-
 		var marker = new google.maps.Marker({
 		    map: map,
 			position: item.location,
 		    title: item.name,
 			animation: google.maps.Animation.DROP
-			marker.addListener('click', toggleBounce);
-		});	
+		});
+
+		marker.addListener('click', toggleBounce);
 		
 		item.marker = marker;
 		bounds.extend(marker.position);
