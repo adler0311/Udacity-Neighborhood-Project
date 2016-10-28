@@ -3,6 +3,8 @@ $('#nav-icon1').click(function(){
 	$(this).toggleClass('open')
 });
 
+
+
 // initialize GoogleMap
 var map, marker;
 function initMap() {
@@ -11,12 +13,18 @@ function initMap() {
 		zoom: 17
   	});
 
-
   	// Activates knockout.js
   	// applyBindings를 여기에 해야 google을 사용할 수 있다.
 	ko.applyBindings(new ViewModel()); 
 }
 
+function toggleBounce() {
+	if (marker.getAnimation() !== null) {
+	    marker.setAnimation(null);
+	} else {
+	    marker.setAnimation(google.maps.Animation.BOUNCE);
+	}
+}
 
 // model of neighborhood location.
 var Spots = [
@@ -80,6 +88,7 @@ var ViewModel = function() {
 	var bounds = new google.maps.LatLngBounds();
 	var rating;
 
+
 	// make marker, click event...
 	self.locations().forEach(function(item) {
 
@@ -111,6 +120,7 @@ var ViewModel = function() {
 			position: item.location,
 		    title: item.name,
 			animation: google.maps.Animation.DROP
+			marker.addListener('click', toggleBounce);
 		});	
 		
 		item.marker = marker;
@@ -131,6 +141,7 @@ var ViewModel = function() {
 
 	map.fitBounds(bounds);
 
+	
 	function populateInfoWindow(marker, infowindow) {
 		// Check to make sure the infowindow is not already opened on the marker
 		if (infowindow.marker != marker) {

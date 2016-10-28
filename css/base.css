@@ -17,8 +17,8 @@ html, body {
 
 @media screen and (max-width: 700px) {
 	#pano {
-	height: 100px;
-	width: 100px;
+	height: 150px;
+	width: 150px;
 	}
 }
 
