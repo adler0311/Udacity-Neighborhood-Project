@@ -13,17 +13,10 @@ function initMap() {
 		zoom: 17
   	});
 
+
   	// Activates knockout.js
   	// applyBindings를 여기에 해야 google을 사용할 수 있다.
 	ko.applyBindings(new ViewModel()); 
-}
-
-function toggleBounce() {
-	if (marker.getAnimation() !== null) {
-	    marker.setAnimation(null);
-	} else {
-	    marker.setAnimation(google.maps.Animation.BOUNCE);
-	}
 }
 
 // model of neighborhood location.
@@ -106,7 +99,6 @@ var ViewModel = function() {
 				if (item.rating === undefined) {
 					item.rating = 'There is no rating';
 				}
-				console.log(item.rating);
 			},
 			error: function(data) {
 				console.log("Failed!")
@@ -120,6 +112,14 @@ var ViewModel = function() {
 			animation: google.maps.Animation.DROP
 		});
 
+		function toggleBounce() {
+			self.locations().forEach(function(item) {
+				item.marker.setAnimation(null);
+			});
+
+			marker.setAnimation(google.maps.Animation.BOUNCE);
+		};
+
 		marker.addListener('click', toggleBounce);
 		
 		item.marker = marker;
@@ -128,7 +128,6 @@ var ViewModel = function() {
 		// events when click the marker
 		marker.addListener('click', function() {
 			// execute displayInfoWindow function when click the marker
-			console.log(marker)
 			marker.rating = item.rating;
 			populateInfoWindow(this, infowindow);
 		});
@@ -158,10 +157,8 @@ var ViewModel = function() {
 			function getStreetView(data, status) {
 				if (status == google.maps.StreetViewStatus.OK) {
 					var nearStreetViewLocation = data.location.latLng;
-					console.log(nearStreetViewLocation);
 					var heading = google.maps.geometry.spherical.computeHeading(
 						nearStreetViewLocation, marker.position);
-					console.log(marker.rating)
 					infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>'+ '<p>Foursquare rating: ' + marker.rating + '</p>');
 					var panoramaOptions = {
 						position: nearStreetViewLocation,
@@ -171,7 +168,6 @@ var ViewModel = function() {
 						}
 					};
 					var panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), panoramaOptions);
-					console.log(panorama);
 				} else {
 					infowindow.setContent('<div>' + marker.title +'</div>'+'<div>No Street View Found</div>');
  				}
@@ -192,7 +188,6 @@ var ViewModel = function() {
 		var filter = self.filter().toLowerCase();
 		return self.locations().filter(function(item) { // 입력한 값이 item.name안에 있으면 true
 			var match = (item.name.toLowerCase().indexOf(filter) > -1) //입력한 글자가 item이름에 있으면 match = true
-			console.log(match)
 			if (!match) {
 				item.marker.setMap(null);
 			} else {
