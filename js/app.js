@@ -1,3 +1,8 @@
+$('#nav-icon1').click(function(){
+	$('#navigation').toggle();
+	$(this).toggleClass('open')
+});
+
 // initialize GoogleMap
 var map, marker;
 function initMap() {
@@ -95,7 +100,7 @@ var ViewModel = function() {
 				console.log(item.rating);
 			},
 			error: function(data) {
-				alert("Failed!")
+				console.log("Failed!")
 			}
 		});
 
@@ -112,9 +117,10 @@ var ViewModel = function() {
 		bounds.extend(marker.position);
 
 		// events when click the marker
-		marker.addListener('click', function(){
+		marker.addListener('click', function() {
 			// execute displayInfoWindow function when click the marker
-			marker.rating = item.rating
+			console.log(marker)
+			marker.rating = item.rating;
 			populateInfoWindow(this, infowindow);
 		});
 
@@ -134,7 +140,7 @@ var ViewModel = function() {
 			
 			//Make sure the marker property is cleared if the infowindow is closed.
 			infowindow.addListener('closeclick', function() {
-				infowindow.marker =null ;
+				infowindow.marker = null;
 			});
 			var streetViewService = new google.maps.StreetViewService();
 			var radius = 50;
@@ -186,3 +192,4 @@ var ViewModel = function() {
 		});
 	});
 };
+
