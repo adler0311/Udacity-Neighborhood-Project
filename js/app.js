@@ -149,6 +149,7 @@ var ViewModel = function() {
 			
 			//Make sure the marker property is cleared if the infowindow is closed.
 			infowindow.addListener('closeclick', function() {
+				marker.setAnimation(null);
 				infowindow.marker = null;
 			});
 			var streetViewService = new google.maps.StreetViewService();
