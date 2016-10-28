@@ -3,8 +3,6 @@ $('#nav-icon1').click(function(){
 	$(this).toggleClass('open')
 });
 
-
-
 // initialize GoogleMap
 var map, marker;
 function initMap() {
@@ -12,7 +10,6 @@ function initMap() {
 		center: {lat: 37.5586875, lng: 126.93669879999993},
 		zoom: 17
   	});
-
 
   	// Activates knockout.js
   	// applyBindings를 여기에 해야 google을 사용할 수 있다.
@@ -101,7 +98,7 @@ var ViewModel = function() {
 				}
 			},
 			error: function(data) {
-				console.log("Failed!")
+				alert("The Foursquare API loading is failed!")
 			}
 		});
 

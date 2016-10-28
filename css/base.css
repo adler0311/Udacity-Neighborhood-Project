@@ -33,7 +33,7 @@ html, body {
 #nav-icon1 {
 	position: absolute;
   	z-index: 1;
-	width: 60px;
+	width: 2%;
 	right: 40px;
 	height: 45px;
 	margin-top: 20px;
@@ -51,7 +51,7 @@ html, body {
 #nav-icon1 span {
 	display: block;
 	position: absolute;
-	height: 9px;
+	height: 10%;
 	width: 100%;
 	background: #d3531a;
 	border-radius: 9px;
@@ -72,11 +72,11 @@ html, body {
 }
 
 #nav-icon1 span:nth-child(2) {
-	top: 18px;
+	top: 20%;
 }
 
 #nav-icon1 span:nth-child(3) {
-	top: 36px;
+	top: 40%;
 }
 
 #nav-icon1.open span:nth-child(1) {
@@ -102,4 +102,8 @@ html, body {
 
 #navigation {
 	display: none;
+}
+
+.list {
+	margin-left: 20px;
 }

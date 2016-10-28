@@ -18,22 +18,19 @@
 	  <span></span>
 	  <span></span>
 	</div>
-	<div id= "navigation" role="navigation" >
-		<div class="col-md-4">
-			<div class="search">
-		    	<label>Search</label>
-		    	<input data-bind='value: filter, valueUpdate: "afterkeydown"' class="form-control">
-			</div>
+	
 
-			<div class="list">
-				<p> Searching result : <strong data-bind="text: filter"></strong></p>
-
-				<ul data-bind="foreach: filteredItems">
-	        		<li data-bind="click: displayInfoWindow">
-	            		<span data-bind="text: $data.name"></span>
-	        		</li>
-	    		</ul>
-			</div>
+	<div id= "navigation">
+		<div class="search">
+	    	<label>Search</label>
+	    	<input data-bind='value: filter, valueUpdate: "afterkeydown"' class="form-control">
+		</div>
+		<div class="list">
+			<ul data-bind="foreach: filteredItems">
+	    		<li data-bind="click: displayInfoWindow">
+	        		<span data-bind="text: $data.name"></span>
+	    		</li>
+			</ul>
 		</div>
 	</div>
 	
