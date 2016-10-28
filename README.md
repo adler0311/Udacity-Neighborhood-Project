@@ -4,7 +4,7 @@ The location of neighborhood is Seoul, Korea.
 
 ##Quickstart
 Just go to the below github and clone this, and execute the index.html
-[Item Catalog Website](https://github.com/adler0311/Udacity-Neighborhood-Project).
+[Neighborhood map](https://neighbborhoodmap.herokuapp.com/).
 
 ##Technique being used: 
 1. Google Map API

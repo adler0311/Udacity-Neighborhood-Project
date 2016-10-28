@@ -12,7 +12,6 @@ function initMap() {
   	});
 
   	// Activates knockout.js
-  	// applyBindings를 여기에 해야 google을 사용할 수 있다.
 	ko.applyBindings(new ViewModel()); 
 }
 
@@ -67,11 +66,11 @@ var Spot = function(data) {
 
 var ViewModel = function() {
 	var self = this;	
-	this.locations = ko.observableArray([]); // observableArray를 만든다. 
+	this.locations = ko.observableArray([]); // make observableArray
 
 	// populates locations observable array from Spots
 	Spots.forEach(function(spot) {
-		self.locations.push(new Spot(spot)); // 모델로부터 spot데이터를 가져와서 Spot이라는 object에서 observable로 바꾼 후 spotList에 집어 넣는다.
+		self.locations.push(new Spot(spot)); 
 	});
 
 	var infowindow = new google.maps.InfoWindow();
@@ -179,17 +178,17 @@ var ViewModel = function() {
 		} // end of the if statement
 	}; // end of the populateInfoWindow function.
 
-	self.filter = ko.observable(""); // searching form의 value.
+	self.filter = ko.observable(""); // value of searching form
 
-	// filter된 결과 list. list에 출력될 예정.
+	// filtered list. append to list
 	self.filteredItems = ko.computed(function() {
 		var filter = self.filter().toLowerCase();
-		return self.locations().filter(function(item) { // 입력한 값이 item.name안에 있으면 true
-			var match = (item.name.toLowerCase().indexOf(filter) > -1) //입력한 글자가 item이름에 있으면 match = true
+		return self.locations().filter(function(item) { 
+			var match = (item.name.toLowerCase().indexOf(filter) > -1)
 			if (!match) {
 				item.marker.setMap(null);
 			} else {
-				item.marker.setMap(map); // map에 올린다는 뜻이다. 
+				item.marker.setMap(map); 
 				return item.name.toLowerCase().indexOf(filter) > -1;
 			}
 		});
