@@ -13,14 +13,12 @@
 
 </head>
 <body>
-	<div id="nav-icon1">
+	<header id="nav-icon1">
 	  <span></span>
 	  <span></span>
 	  <span></span>
-	</div>
-	
-
-	<div id= "navigation">
+	</header>
+	<nav id = "navigation">
 		<div class="search">
 	    	<label>Search</label>
 	    	<input data-bind='value: filter, valueUpdate: "afterkeydown"' class="form-control">
@@ -32,16 +30,17 @@
 	    		</li>
 			</ul>
 		</div>
-	</div>
-	
-	<div id="map">
-	</div>
+	</nav>
+	<main>
+		<div id="map">
+		</div>
+	</main>
 
 	<script src="js/jquery.js"></script>
-	<script async defer
-        src="https://maps.googleapis.com/maps/api/js?library=geometry&key=AIzaSyCN8BnYNGhWuF7BnN_Q36jjyLfeQFEe_Lw&callback=initMap">
-    </script>
   	<script src="js/lib/knockout-3.2.0.js"></script>
     <script src="js/app.js"></script>
+    <script async defer 
+        src="https://maps.googleapis.com/maps/api/js?library=geometry&key=AIzaSyCN8BnYNGhWuF7BnN_Q36jjyLfeQFEe_Lw&callback=initMap">
+    </script>
 </body>
 </html>

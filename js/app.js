@@ -3,6 +3,14 @@ $('#nav-icon1').click(function(){
 	$(this).toggleClass('open')
 });
 
+
+// Google map api error handler function.
+function ErrorHandler() {
+	if(!google){
+		alert("Failed to load Google APIs");
+};
+
+
 // initialize GoogleMap
 var map, marker;
 function initMap() {
@@ -13,47 +21,45 @@ function initMap() {
 
   	// Activates knockout.js
 	ko.applyBindings(new ViewModel()); 
-}
+};
 
 // model of neighborhood location.
-var Spots = [
+var spots = [
 	{
-		name: "Chloris Tea Garden",
+		name: 'Chloris Tea Garden',
 		location: {lat: 37.55774448891895, lng: 126.93872809410095},
 		foursquareId: "4bcac5b6fb84c9b62fca1d3e"
 	},
 	{
-		name: "bar TILT",
+		name: 'bar TILT',
 		location: {lat: 37.55891542039909, lng: 126.93534692663208},
 		foursquareId: "4df2462452b100c2d7f5e412"
 	},
 	{
-		name: "Minerva",
+		name: 'Minerva',
 		location: {lat: 37.55786084240519, lng: 126.93774042764508},
 		foursquareId: "4baca972f964a520b1013be3"
 	},
 	{
-		name: "Nice Pig",
+		name: 'Nice Pig',
 		location: {lat: 37.55853536087748, lng: 126.93880593034153},
 		foursquareId: "50113732e4b0c3490cf8c245"
 	},
 	{
-		name: "The Pie Hole",
+		name: 'The Pie Hole',
 		location: {lat: 37.55914992666027, lng: 126.9344703398036},
 		foursquareId: "4f86ae01e4b0fa91a17db513"
 	},
 	{
-		name: "Gosami",
+		name: 'Gosami',
 		location: {lat: 37.558267958610564, lng: 126.93474329012058},
 		foursquareId: "4ee57d189adf398200800b03"
 	},
 	{
-		name: "Pomme Frites",
+		name: 'Pomme Frites',
 		location: {lat: 37.558942152661935, lng: 126.93552014314709},
 		foursquareId: "513af3dde4b06910fe19e72b"
-	},
-	
-
+	}
 ];
 
 
@@ -68,8 +74,8 @@ var ViewModel = function() {
 	var self = this;	
 	this.locations = ko.observableArray([]); // make observableArray
 
-	// populates locations observable array from Spots
-	Spots.forEach(function(spot) {
+	// populates locations observable array from spots
+	spots.forEach(function(spot) {
 		self.locations.push(new Spot(spot)); 
 	});
 
@@ -92,7 +98,7 @@ var ViewModel = function() {
 			async: true,
 			success: function(data) {
 				item.rating = data.response.groups[0].items[0].venue.rating;
-				if (item.rating === undefined) {
+				if (!item.rating) {
 					item.rating = 'There is no rating';
 				}
 			},
@@ -129,6 +135,7 @@ var ViewModel = function() {
 		});
 
 		item.displayInfoWindow = function() {
+			marker.addListener('click', toggleBounce);
 			populateInfoWindow(this.marker, infowindow);;			
 		}
 	});
@@ -186,12 +193,11 @@ var ViewModel = function() {
 		return self.locations().filter(function(item) { 
 			var match = (item.name.toLowerCase().indexOf(filter) > -1)
 			if (!match) {
-				item.marker.setMap(null);
+				item.marker.setVisible(false);
 			} else {
 				item.marker.setMap(map); 
 				return item.name.toLowerCase().indexOf(filter) > -1;
 			}
 		});
-	});
-};
-
+	})
+}}
