@@ -13,12 +13,12 @@
 
 </head>
 <body>
-	<header id="nav-icon1">
+	<header data-bind="css: {open: isActive}, {'#navigation': isActive}, click: toggleActive" id="nav-icon1">
 	  <span></span>
 	  <span></span>
 	  <span></span>
 	</header>
-	<nav id = "navigation">
+	<nav id = "navigation" data-bind="css: {open: isActive}">
 		<div class="search">
 	    	<label>Search</label>
 	    	<input data-bind='value: filter, valueUpdate: "afterkeydown"' class="form-control">
@@ -31,16 +31,15 @@
 			</ul>
 		</div>
 	</nav>
-	<main>
-		<div id="map">
-		</div>
-	</main>
+	<div id="map">
+	</div>
 
 	<script src="js/jquery.js"></script>
   	<script src="js/lib/knockout-3.2.0.js"></script>
     <script src="js/app.js"></script>
-    <script async defer 
-        src="https://maps.googleapis.com/maps/api/js?library=geometry&key=AIzaSyCN8BnYNGhWuF7BnN_Q36jjyLfeQFEe_Lw&callback=initMap">
+    <script async 
+        src="https://maps.googleapis.com/maps/api/js?library=geometry&key=AIzaSyDOZhYkXdYEeB51O3L_TYW0JIWVrqvYaSI&callback=initMap"
+        onerror="mapError()">
     </script>
 </body>
 </html>

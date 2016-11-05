@@ -33,9 +33,9 @@ html, body {
 #nav-icon1 {
 	position: absolute;
   	z-index: 1;
-	width: 2%;
-	right: 40px;
-	height: 45px;
+	width: 50px;
+	right: 30px;
+	height: 70px;
 	margin-top: 20px;
 	-webkit-transform: rotate(0deg);
 	-moz-transform: rotate(0deg);
@@ -102,6 +102,10 @@ html, body {
 
 #navigation {
 	display: none;
+}
+
+#navigation.open {
+	display: inline;
 }
 
 .list {

@@ -1,15 +1,3 @@
-$('#nav-icon1').click(function(){
-	$('#navigation').toggle();
-	$(this).toggleClass('open')
-});
-
-
-// Google map api error handler function.
-function ErrorHandler() {
-	if(!google){
-		alert("Failed to load Google APIs");
-};
-
 
 // initialize GoogleMap
 var map, marker;
@@ -22,6 +10,10 @@ function initMap() {
   	// Activates knockout.js
 	ko.applyBindings(new ViewModel()); 
 };
+
+function mapError() {
+	alert("There's a problem. Google map loading is faild!")
+}
 
 // model of neighborhood location.
 var spots = [
@@ -72,6 +64,13 @@ var Spot = function(data) {
 
 var ViewModel = function() {
 	var self = this;	
+
+	self.isActive = ko.observable();
+	self.toggleActive = function() {
+		self.isActive(!self.isActive())	
+	}
+
+
 	this.locations = ko.observableArray([]); // make observableArray
 
 	// populates locations observable array from spots
@@ -82,7 +81,7 @@ var ViewModel = function() {
 	var infowindow = new google.maps.InfoWindow();
 	var bounds = new google.maps.LatLngBounds();
 	var rating;
-
+	var toggleError = false;
 
 	// make marker, click event...
 	self.locations().forEach(function(item) {
@@ -103,7 +102,7 @@ var ViewModel = function() {
 				}
 			},
 			error: function(data) {
-				alert("The Foursquare API loading is failed!")
+				toggleError = true
 			}
 		});
 
@@ -135,13 +134,18 @@ var ViewModel = function() {
 		});
 
 		item.displayInfoWindow = function() {
-			marker.addListener('click', toggleBounce);
+			toggleBounce();
 			populateInfoWindow(this.marker, infowindow);;			
 		}
 	});
 
 	map.fitBounds(bounds);
 
+	$(document).ajaxStop(function(){
+		if (toggleError == true) {
+			alert("The Foursquare API loading is failed!");
+		}
+	})
 	
 	function populateInfoWindow(marker, infowindow) {
 		// Check to make sure the infowindow is not already opened on the marker
@@ -200,4 +204,4 @@ var ViewModel = function() {
 			}
 		});
 	})
-}}
+}
