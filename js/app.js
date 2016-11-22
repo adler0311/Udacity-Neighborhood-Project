@@ -199,7 +199,8 @@ var ViewModel = function() {
 			if (!match) {
 				item.marker.setVisible(false);
 			} else {
-				item.marker.setMap(map); 
+				item.marker.setMap(map);
+				item.marker.setVisible(true);
 				return item.name.toLowerCase().indexOf(filter) > -1;
 			}
 		});
