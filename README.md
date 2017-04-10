@@ -14,10 +14,10 @@ Just go to the below github and clone this, and execute the index.html
 5. JQuery
 
 - Resources Used
-http://jquery.com
-http://knockoutjs.com
-https://developer.foursquare.com
-https://developers.google.com/maps
+ http://jquery.com
+ http://knockoutjs.com
+ https://developer.foursquare.com
+ https://developers.google.com/maps
 
 ## Instruction
 1. When you open index.html, there is a map, initially designated marker and hamburger button.
